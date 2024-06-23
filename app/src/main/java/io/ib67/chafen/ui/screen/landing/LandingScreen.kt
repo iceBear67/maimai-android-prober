@@ -1,13 +1,7 @@
 package io.ib67.chafen.ui.screen.landing
 
-import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandHorizontally
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -48,17 +42,14 @@ import io.ib67.chafen.ktorHttpClient
 import io.ib67.chafen.network.MaimaiPlayerData
 import io.ib67.chafen.network.ResponseWrapper
 import io.ib67.chafen.ui.component.Stepper
-import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
-import java.lang.IllegalArgumentException
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -146,7 +137,7 @@ fun StepProxy(index: Int, increaseFunc: () -> Unit) {
     Stepper(index = index, title = "启动代理", status = false, nextStepper = {}) {
         Text(text = "如果系统弹窗请求权限，请允许。")
         Button(onClick = {
-            
+
         }) {
             Text(text = "Start!")
         }
