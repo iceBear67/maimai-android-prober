@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "io.ib67.chafen"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -75,5 +75,6 @@ dependencies {
     implementation("io.ktor:ktor-client-core:$ktor_version")
     implementation("io.ktor:ktor-client-cio:$ktor_version")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+    implementation("com.google.accompanist:accompanist-permissions:0.35.1-alpha")
 
 }
