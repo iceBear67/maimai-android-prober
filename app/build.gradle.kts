@@ -76,5 +76,6 @@ dependencies {
     implementation("io.ktor:ktor-client-cio:$ktor_version")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
     implementation("com.google.accompanist:accompanist-permissions:0.35.1-alpha")
+    implementation("androidx.compose.material:material-icons-extended:1.5.1")
 
 }

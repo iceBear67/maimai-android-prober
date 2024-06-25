@@ -7,22 +7,37 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.net.VpnService
+import android.os.Binder
 import android.os.IBinder
-import android.util.Log
 import androidx.core.app.NotificationCompat
 
 
 class MaimaiVpnService : VpnService() {
     companion object {
-        val ACTION_CONNECT = "io.ib67.chafen.proxy.START"
-        val ACTION_DISCONNECT = "io.ib67.chafen.proxy.STOP"
+        const val ACTION_CONNECT = "io.ib67.chafen.proxy.START"
+        const val ACTION_DISCONNECT = "io.ib67.chafen.proxy.STOP"
         const val NOTIFICATION_ID = 1001
         const val CHANNEL_ID = "maimai-prober"
     }
 
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
+    class MaimaiBinder(val svc: MaimaiVpnService) : Binder() {}
+
+    override fun onBind(intent: Intent?): IBinder {
+        return MaimaiBinder(this)
     }
+
+    override fun onDestroy() {
+
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val notification = createNotification()
+        startForeground(NOTIFICATION_ID, notification)
+        val builder = Builder()
+        builder.addAllowedApplication("com.tencent.mm")
+        return START_NOT_STICKY
+    }
+
 
     private fun createNotification(): Notification {
         val notificationManager = getSystemService(
@@ -62,15 +77,5 @@ class MaimaiVpnService : VpnService() {
             .addAction(R.drawable.ic_media_play, "打开微信", openWeChatIntent)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         return builder.build()
-    }
-
-    override fun onDestroy() {
-        Log.e("MaimaiVpnSvc", "Destroyed??")
-    }
-
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val notification = createNotification()
-        startForeground(NOTIFICATION_ID, notification)
-        return START_NOT_STICKY
     }
 }
