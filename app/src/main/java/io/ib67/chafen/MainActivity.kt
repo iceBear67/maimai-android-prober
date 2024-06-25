@@ -1,9 +1,11 @@
 package io.ib67.chafen
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -13,10 +15,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -28,21 +26,15 @@ import io.ib67.chafen.ui.theme.ChafenTheme
 
 
 class MainActivity : ComponentActivity() {
-
+    var launcher: ActivityResultLauncher<Intent>? = null // todo remove this shit
     private lateinit var proxyModel: ProxyViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MMKV.initialize(this)
+        initLauncher { }
         setContent {
             ChafenTheme {
-                var init by remember {
-                    mutableStateOf(false)
-                }
                 proxyModel = viewModel()
-                if (!init) {
-                    initLauncher { }
-                    init = true
-                }
                 LandingScreen {
                     ProxyStepperCard()
                 }
@@ -51,7 +43,7 @@ class MainActivity : ComponentActivity() {
     }
 
     fun initLauncher(onSuccess: () -> Unit) {
-        proxyModel.launcher =
+        launcher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == RESULT_OK) {
                     Toast.makeText(this, "授权成功", Toast.LENGTH_SHORT).apply { show() }

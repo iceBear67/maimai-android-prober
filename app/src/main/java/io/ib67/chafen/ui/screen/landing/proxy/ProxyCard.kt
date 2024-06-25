@@ -113,6 +113,7 @@ private fun StepOpenProxy(index: Int, inc: () -> Unit) {
                 if (notificationPermState.status.isGranted) {
                     vm.startService(context) {
                         started = true
+                        inc()
                     }
                 } else {
                     Toast.makeText(context, "需要授权通知...", Toast.LENGTH_LONG).apply { show() }

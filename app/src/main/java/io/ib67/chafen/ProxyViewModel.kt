@@ -10,7 +10,6 @@ import android.os.IBinder
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.ComponentActivity
-import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -31,7 +30,6 @@ class ProxyViewModel : ViewModel() {
 
     private var _cookieCaptured = mutableStateOf("")
     val cookieCaptured = MutableStateFlow(_cookieCaptured)
-    var launcher: ActivityResultLauncher<Intent>? = null
 
     fun info(message: String) {
         logs.add("$logTime $message")
@@ -56,12 +54,16 @@ class ProxyViewModel : ViewModel() {
             Toast.makeText(context, "服务已启动", LENGTH_SHORT).apply { show() }
             connectToService(activity, onSuccess)
         } else {
-            launcher?.launch(intent)
+            (activity as MainActivity).launcher?.launch(intent)
         }
     }
 
     private var binder: MaimaiVpnService.MaimaiBinder? = null
     fun connectToService(activity: Activity, connected: () -> Unit) {
+        if (binder != null) {
+            connected()
+            return
+        }
         activity.startService(getServiceIntent(activity).setAction(MaimaiVpnService.ACTION_CONNECT))
         activity.bindService(getServiceIntent(activity), VpnSvcConn(
             {
